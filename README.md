@@ -109,17 +109,15 @@ puestas y prueba una cotización completa antes de publicar.
    historial sobrevive a los reinicios porque vive en Turso, no en el disco
    de la app.
 
-> Nota: `libsql` (el paquete que habla con Turso) no está en
-> `requirements.txt` como obligatorio. Ya probamos que conecta bien de verdad
-> contra esta base de Turso — el detalle es solo de instalación local: `libsql`
-> publica wheel listo para Linux (lo que usa Streamlit Community Cloud) y para
-> macOS en Python 3.10 a 3.13, pero no para Python 3.9 ni 3.14. Si tu máquina
-> trae uno de esos dos, `pip install libsql` falla intentando compilarlo desde
-> cero (pide `cmake`/Rust). Ponerlo como obligatorio en `requirements.txt`
-> habría roto la instalación de todos, no solo de quien usa Turso — por eso se
-> instala aparte, y solo hace falta cuando defines `TURSO_DATABASE_URL`. Si
-> quieres probarlo en tu máquina y tu Python no es compatible, instala un
-> 3.11 o 3.12 aparte solo para ese venv.
+> Nota: `libsql` (el paquete que habla con Turso) sí está en
+> `requirements.txt` — ya probamos que conecta bien de verdad contra esta
+> base de Turso, y Streamlit Community Cloud lo instala sin problema porque
+> corre Linux, donde `libsql` publica wheel listo. El único lugar donde puede
+> fallar es al probarlo en **local en macOS**: solo tiene wheel de macOS para
+> Python 3.10 a 3.13, no para 3.9 ni 3.14. Si tu máquina trae uno de esos dos,
+> `pip install -r requirements.txt` va a intentar compilarlo desde cero (pide
+> `cmake`/Rust) y falla. Solución: usa un venv con Python 3.11 o 3.12 aparte
+> para probar Turso en local — no afecta el deploy, que corre Linux.
 
 ### Opción B (de paga, más simple): Hugging Face Spaces
 

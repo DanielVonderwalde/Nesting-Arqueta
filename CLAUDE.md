@@ -29,12 +29,13 @@ python3 core.py autotest      # prueba el motor sin interfaz
   ruta.
 - Base de datos intercambiable: SQLite local por default, o Turso (remoto) si
   `TURSO_DATABASE_URL` / `TURSO_AUTH_TOKEN` estan en el ambiente. Ya se probo
-  contra una base real de Turso (autotest completo via red). `libsql` no esta
-  en requirements.txt como obligatorio porque no publica wheel para macOS en
-  Python 3.9 ni 3.14 (si, solo esas dos versiones no tienen; 3.10-3.13 y Linux
-  si tienen), y ponerlo obligatorio habria roto `pip install -r
-  requirements.txt` para cualquiera con una de esas dos versiones. Se instala
-  aparte (`pip install libsql`) solo si vas a usar Turso.
+  contra una base real de Turso (autotest completo via red) y esta desplegado
+  asi en Streamlit Community Cloud. `libsql` SI esta en requirements.txt como
+  obligatorio (sin el, la app truena al arrancar si hay `TURSO_DATABASE_URL`
+  configurado). Solo da lata al instalar en desarrollo local en **macOS** con
+  Python exactamente 3.9 o 3.14 (no publica wheel para esas dos versiones ahi;
+  3.10-3.13 y Linux si tienen) — en ese caso usa un venv con 3.11/3.12 aparte
+  para probar Turso en local. No afecta el deploy, que corre Linux.
 
 ## Reglas del dominio que NO se deben romper
 

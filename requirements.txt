@@ -5,8 +5,13 @@ scipy>=1.10
 shapely>=2.0
 scikit-image>=0.22
 
-# libsql es opcional: solo hace falta si vas a usar Turso (base remota para
-# el hosting gratuito). No lo pongas aqui como requerido, porque su wheel
-# todavia no existe para las versiones mas nuevas de Python (rompe el
-# "pip install -r requirements.txt" de todos, no solo de quien usa Turso).
-# Instalalo aparte cuando lo necesites: pip install libsql
+# Cliente de Turso (base remota que usa el hosting gratuito). Tiene wheel
+# listo para Linux, que es lo que corre Streamlit Community Cloud, asi que
+# aqui si va como requerido: sin el, la app truena al arrancar con
+# TURSO_DATABASE_URL configurado (paso justo lo que le pasaba antes).
+#
+# El unico lugar donde puede fallar al instalar es en desarrollo local en
+# macOS con Python exactamente 3.9 o 3.14 (esas dos versiones no tienen wheel
+# de macOS todavia; 3.10-3.13 si). Si te pasa eso en tu maquina, usa un venv
+# con Python 3.11 o 3.12 para probar Turso en local — no afecta el deploy.
+libsql>=0.1.11
