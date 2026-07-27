@@ -1,0 +1,12 @@
+streamlit>=1.36
+numpy>=1.24
+pillow>=10.0
+scipy>=1.10
+shapely>=2.0
+scikit-image>=0.22
+
+# libsql es opcional: solo hace falta si vas a usar Turso (base remota para
+# el hosting gratuito). No lo pongas aqui como requerido, porque su wheel
+# todavia no existe para las versiones mas nuevas de Python (rompe el
+# "pip install -r requirements.txt" de todos, no solo de quien usa Turso).
+# Instalalo aparte cuando lo necesites: pip install libsql

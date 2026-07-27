@@ -1,0 +1,17 @@
+__pycache__/
+*.pyc
+.venv/
+venv/
+.DS_Store
+.mypy_cache/
+.streamlit/secrets.toml
+
+# Los datos de produccion no van al repositorio.
+# Se conserva la estructura de carpetas con los .gitkeep.
+data/nesting.db
+data/reports/*
+data/outlines/*
+data/uploads/*
+!data/reports/.gitkeep
+!data/outlines/.gitkeep
+!data/uploads/.gitkeep
