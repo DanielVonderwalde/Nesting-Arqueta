@@ -28,10 +28,13 @@ python3 core.py autotest      # prueba el motor sin interfaz
   el disco en cada reinicio. En `.gitignore`. `NESTING_DATA_DIR` cambia esta
   ruta.
 - Base de datos intercambiable: SQLite local por default, o Turso (remoto) si
-  `TURSO_DATABASE_URL` / `TURSO_AUTH_TOKEN` estan en el ambiente. `libsql` no
-  esta en requirements.txt como obligatorio porque no tiene wheel para
-  versiones de Python muy nuevas todavia; se instala aparte (`pip install
-  libsql`) solo si vas a usar Turso.
+  `TURSO_DATABASE_URL` / `TURSO_AUTH_TOKEN` estan en el ambiente. Ya se probo
+  contra una base real de Turso (autotest completo via red). `libsql` no esta
+  en requirements.txt como obligatorio porque no publica wheel para macOS en
+  Python 3.9 ni 3.14 (si, solo esas dos versiones no tienen; 3.10-3.13 y Linux
+  si tienen), y ponerlo obligatorio habria roto `pip install -r
+  requirements.txt` para cualquiera con una de esas dos versiones. Se instala
+  aparte (`pip install libsql`) solo si vas a usar Turso.
 
 ## Reglas del dominio que NO se deben romper
 

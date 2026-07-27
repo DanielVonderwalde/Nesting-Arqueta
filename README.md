@@ -110,13 +110,16 @@ puestas y prueba una cotización completa antes de publicar.
    de la app.
 
 > Nota: `libsql` (el paquete que habla con Turso) no está en
-> `requirements.txt` como obligatorio porque su instalación falla en
-> versiones de Python muy nuevas que todavía no tienen su instalador listo
-> (rompería `pip install -r requirements.txt` para todos, no solo para quien
-> usa Turso). Streamlit Community Cloud usa una versión de Python donde sí
-> instala bien; si tu máquina local falla al instalarlo, no es necesario para
-> correr la app en local sin Turso — solo hace falta cuando defines
-> `TURSO_DATABASE_URL`.
+> `requirements.txt` como obligatorio. Ya probamos que conecta bien de verdad
+> contra esta base de Turso — el detalle es solo de instalación local: `libsql`
+> publica wheel listo para Linux (lo que usa Streamlit Community Cloud) y para
+> macOS en Python 3.10 a 3.13, pero no para Python 3.9 ni 3.14. Si tu máquina
+> trae uno de esos dos, `pip install libsql` falla intentando compilarlo desde
+> cero (pide `cmake`/Rust). Ponerlo como obligatorio en `requirements.txt`
+> habría roto la instalación de todos, no solo de quien usa Turso — por eso se
+> instala aparte, y solo hace falta cuando defines `TURSO_DATABASE_URL`. Si
+> quieres probarlo en tu máquina y tu Python no es compatible, instala un
+> 3.11 o 3.12 aparte solo para ese venv.
 
 ### Opción B (de paga, más simple): Hugging Face Spaces
 
