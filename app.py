@@ -17,18 +17,31 @@ import streamlit as st
 import auth
 import core
 
-st.set_page_config(page_title="Nesting", page_icon="⬛", layout="wide")
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+ASSETS_DIR = os.path.join(BASE_DIR, "assets")
+ICON_PATH = os.path.join(ASSETS_DIR, "icon.png")
+LOGO_PATH = os.path.join(ASSETS_DIR, "logo-apilado.png")
+
+st.set_page_config(
+    page_title="Nesting — Arqueta Folding",
+    page_icon=ICON_PATH if os.path.exists(ICON_PATH) else "⬛",
+    layout="wide",
+)
 
 core.init_db()
 USUARIO = auth.usuario_actual()
 
 
 # --- Estilo -----------------------------------------------------------------
+# Paleta tomada del logo de Arqueta Folding: azul de marca #2D6AB4, y los
+# colores semaforo (ok/aviso/mal) se quedan igual porque son de dominio
+# (verde/ambar/rojo para el delta del trazado), no de marca.
 
 st.markdown("""
 <style>
   .block-container { padding-top: 2.2rem; max-width: 1200px; }
   [data-testid="stMetricValue"] { font-size: 1.6rem; }
+  h1, h2, h3 { color: #17324B; }
   .ok   { color:#1a7f37; font-weight:500; }
   .aviso{ color:#9a6700; font-weight:500; }
   .mal  { color:#b42318; font-weight:500; }
@@ -316,7 +329,10 @@ def vista_guardada(cot_id):
 
 # --- Enrutador --------------------------------------------------------------
 
-st.sidebar.title("Nesting")
+if os.path.exists(LOGO_PATH):
+    st.sidebar.image(LOGO_PATH, width=160)
+else:
+    st.sidebar.title("Nesting")
 st.sidebar.caption("Acomodo de suajes en pliego")
 
 cot_id = st.query_params.get("id")
