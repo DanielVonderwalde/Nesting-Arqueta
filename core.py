@@ -337,6 +337,25 @@ def traza(archivo, ancho_mm, alto_mm, oneup, stroke="auto"):
 
 # --- Calculo ----------------------------------------------------------------
 
+def ajusta_a_medidas_capturadas(puntos, ancho_mm, alto_mm):
+    """Reescala el contorno trazado para que su caja (ancho x alto) coincida
+    exacto con lo que la gente capturo a mano.
+
+    El trazo del PDF sirve para conocer la FORMA real del blank (pestañas,
+    muescas) y con eso encontrar el mejor acomodo/giro — no para la medida
+    final. La medida capturada a mano es mas exacta que lo que el trazo
+    implica (ver height_match_delta_mm), asi que el nesting y el pliego real
+    siempre se calculan sobre las medidas capturadas.
+    """
+    xs = [p[0] for p in puntos]
+    ys = [p[1] for p in puntos]
+    minx, maxx = min(xs), max(xs)
+    miny, maxy = min(ys), max(ys)
+    esc_x = ancho_mm / (maxx - minx)
+    esc_y = alto_mm / (maxy - miny)
+    return [[round((x - minx) * esc_x, 2), round((y - miny) * esc_y, 2)] for x, y in puntos]
+
+
 def calcula(puntos, cliente, oneup, proyecto, salida_html):
     """Corre el nesting sobre las cuatro bobinas estandar."""
     cfg = {
@@ -388,6 +407,11 @@ def corre_cotizacion(cliente, oneup, proyecto, ancho_mm, alto_mm,
             f"No hay contorno guardado para {oneup} y no se subio ningun trazo. "
             "Sube el PDF o la imagen del die-line."
         )
+
+    # El trazo (nuevo o reusado) da la forma; las medidas finales de la caja
+    # son siempre las capturadas a mano en esta cotizacion, nunca las que
+    # implica el trazo.
+    puntos = ajusta_a_medidas_capturadas(puntos, ancho_mm, alto_mm)
 
     cot_id = uuid.uuid4().hex[:12]
     nombre = f"{oneup}_{slug(proyecto)}_{cot_id}.html"
