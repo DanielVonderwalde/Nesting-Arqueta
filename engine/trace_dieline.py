@@ -72,7 +72,23 @@ def load_image(cfg):
     if best is None:
         raise SystemExit('No uncompressed RGB image found in PDF')
     need, W, H, start = best
-    return Image.frombytes('RGB', (W, H), data[start:start + need])
+    img = Image.frombytes('RGB', (W, H), data[start:start + need])
+
+    # La pagina puede traer /Rotate (comun en die-lines exportados apaisados
+    # aunque el dibujo se vea parado al abrirlo). Esa bandera solo le dice al
+    # visor que gire la pagina al mostrarla — los bytes de la imagen embebida
+    # NO vienen girados. Sin aplicarla aqui, el trazo queda con ancho y alto
+    # invertidos respecto a lo que la gente ve en pantalla.
+    rot = re.search(rb'/Rotate\s+(-?\d+)', data)
+    if rot:
+        angle = int(rot.group(1)) % 360
+        if angle == 90:
+            img = img.transpose(Image.Transpose.ROTATE_270)  # PDF 90 CW = PIL 270 CCW
+        elif angle == 180:
+            img = img.transpose(Image.Transpose.ROTATE_180)
+        elif angle == 270:
+            img = img.transpose(Image.Transpose.ROTATE_90)
+    return img
 
 
 def trace(cfg):
