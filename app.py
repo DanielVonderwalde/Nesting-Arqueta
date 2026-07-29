@@ -271,9 +271,28 @@ def vista_historial():
         for r in filas
     }
     elegida = st.selectbox("Abrir una cotizacion", list(etiquetas))
-    if st.button("Ver", type="primary"):
-        st.query_params["id"] = etiquetas[elegida]
+    elegida_id = etiquetas[elegida]
+
+    c1, c2 = st.columns(2)
+    if c1.button("Ver", type="primary"):
+        st.query_params["id"] = elegida_id
         st.rerun()
+
+    if st.session_state.get("confirmar_borrar") != elegida_id:
+        if c2.button("Borrar"):
+            st.session_state["confirmar_borrar"] = elegida_id
+            st.rerun()
+    else:
+        st.warning(f"¿Borrar «{elegida}»? No se puede deshacer.")
+        cc1, cc2 = st.columns(2)
+        if cc1.button("Si, borrar definitivamente", type="primary"):
+            core.borra(elegida_id)
+            st.session_state.pop("confirmar_borrar", None)
+            st.success("Cotizacion borrada.")
+            st.rerun()
+        if cc2.button("Cancelar"):
+            st.session_state.pop("confirmar_borrar", None)
+            st.rerun()
 
 
 def _csv(filas):
@@ -322,9 +341,26 @@ def vista_guardada(cot_id):
 
     muestra_resultado(registro, json.loads(registro["resultado"]), trazado)
 
-    if st.button("Volver al inicio"):
+    c1, c2 = st.columns(2)
+    if c1.button("Volver al inicio"):
         st.query_params.clear()
         st.rerun()
+
+    if st.session_state.get("confirmar_borrar") != cot_id:
+        if c2.button("Borrar esta cotizacion"):
+            st.session_state["confirmar_borrar"] = cot_id
+            st.rerun()
+    else:
+        st.warning("¿Borrar esta cotizacion? No se puede deshacer.")
+        cc1, cc2 = st.columns(2)
+        if cc1.button("Si, borrar definitivamente", type="primary"):
+            core.borra(cot_id)
+            st.session_state.pop("confirmar_borrar", None)
+            st.query_params.clear()
+            st.rerun()
+        if cc2.button("Cancelar"):
+            st.session_state.pop("confirmar_borrar", None)
+            st.rerun()
 
 
 # --- Enrutador --------------------------------------------------------------
